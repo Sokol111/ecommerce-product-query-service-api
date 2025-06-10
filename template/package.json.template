@@ -14,7 +14,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "${REPOSITORY_URL}"
+    "url": "git+${REPOSITORY_URL}"
   },
   "dependencies": {
     "axios": "^1.6.1"
