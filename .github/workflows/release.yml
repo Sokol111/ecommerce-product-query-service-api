@@ -3,6 +3,9 @@ name: Generate and Release SDK
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   release:
     uses: Sokol111/ecommerce-ci-templates/.github/workflows/reusable-sdk-release.yml@master
