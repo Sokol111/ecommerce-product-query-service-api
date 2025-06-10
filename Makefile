@@ -5,6 +5,7 @@ GEN_PKG := api
 GEN_DIR ?= $(GEN_PKG)
 JS_CLIENT_DIR ?= js-client
 VERSION ?= 0.0.1
+VERSION_NO_V := $(VERSION:v%=%)
 TEMPLATE_DIR ?= template
 
 .PHONY: install-tools types server client js-generate js-package js-tsconfig js-build js clean
@@ -12,6 +13,7 @@ TEMPLATE_DIR ?= template
 install-tools:
 	@which oapi-codegen >/dev/null || go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
 	@which openapi-generator-cli >/dev/null || npm install -g @openapitools/openapi-generator-cli
+	@which envsubst >/dev/null || sudo apt-get update && sudo apt-get install -y gettext
 
 types:
 	@echo "Generating types (models)..."
@@ -39,12 +41,12 @@ js-generate:
 
 js-package:
 	@echo "Generating package.json..."
-	@sed -e 's|\$${PACKAGE_NAME}|$(PACKAGE_NAME)|g' \
-		 -e 's|\$${VERSION}|$(shell echo $(VERSION) | sed 's/^v//')|g' \
-	     -e 's|\$${PROJECT_NAME}|$(PROJECT_NAME)|g' \
-	     -e 's|\$${AUTHOR}|$(AUTHOR)|g' \
-	     -e 's|\$${REPOSITORY_URL}|$(REPOSITORY_URL)|g' \
-	     $(TEMPLATE_DIR)/package.json.template > $(JS_CLIENT_DIR)/package.json
+	@PACKAGE_NAME=$(PACKAGE_NAME) \
+	 VERSION=$(VERSION_NO_V) \
+	 PROJECT_NAME=$(PROJECT_NAME) \
+	 AUTHOR=$(AUTHOR) \
+	 REPOSITORY_URL=$(REPOSITORY_URL) \
+	 envsubst < $(TEMPLATE_DIR)/package.json.template > $(JS_CLIENT_DIR)/package.json
 
 js-tsconfig:
 	@echo "Generating tsconfig.json..."
