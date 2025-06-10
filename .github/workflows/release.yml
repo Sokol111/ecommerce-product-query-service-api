@@ -1,0 +1,17 @@
+name: Generate and Release SDK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    uses: Sokol111/ecommerce-ci-templates/.github/workflows/reusable-sdk-release.yml@master
+    with:
+      go-version: "1.24.2"
+      node-version: "20"
+      openapi-file: "openapi/openapi.yml"
+      js-client-dir: "js-client"
+      gen-dir: "api"
+      template-dir: "template"
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
