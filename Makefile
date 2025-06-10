@@ -1,3 +1,4 @@
+include .env
 OAPI_GEN := $(HOME)/go/bin/oapi-codegen
 OPENAPI_FILE ?= openapi/openapi.yml
 GEN_PKG := api
@@ -6,7 +7,7 @@ JS_CLIENT_DIR ?= js-client
 VERSION ?= 0.0.1
 TEMPLATE_DIR ?= template
 
-.PHONY: install-tools types server client js-generate js-config js-version js-build js clean
+.PHONY: install-tools types server client js-generate js-package js-tsconfig js-version js-build js clean
 
 install-tools:
 	@which oapi-codegen >/dev/null || go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
@@ -36,10 +37,17 @@ js-generate:
 		-o $(JS_CLIENT_DIR) \
 		--additional-properties=useSingleRequestParameter=true
 
-js-config:
-	@echo "Copying package.json and tsconfig.json..."
-	cp $(TEMPLATE_DIR)/package.json $(JS_CLIENT_DIR)/package.json
-	cp $(TEMPLATE_DIR)/tsconfig.json $(JS_CLIENT_DIR)/tsconfig.json
+js-package:
+	@echo "Generating package.json..."
+	@sed -e 's|\$${PACKAGE_NAME}|$(PACKAGE_NAME)|g' \
+	     -e 's|\$${PROJECT_NAME}|$(PROJECT_NAME)|g' \
+	     -e 's|\$${AUTHOR}|$(AUTHOR)|g' \
+	     -e 's|\$${REPOSITORY_URL}|$(REPOSITORY_URL)|g' \
+	     package.json.template > $(JS_CLIENT_DIR)/package.json
+
+js-tsconfig:
+	@echo "Generating tsconfig.json..."
+	cp $(TEMPLATE_DIR)/tsconfig.json.template $(JS_CLIENT_DIR)/tsconfig.json
 
 js-version:
 	@echo "Setting version..."
@@ -52,7 +60,7 @@ js-build:
 	cd $(JS_CLIENT_DIR) && npm run build
 	@echo "JS client ready in $(JS_CLIENT_DIR)/dist"
 
-js: js-generate js-config js-version js-build
+js: js-generate js-package js-tsconfig js-version js-build
 
 clean:
 	rm -rf $(GEN_DIR)
