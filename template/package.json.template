@@ -1,6 +1,7 @@
 {
   "name": "${PACKAGE_NAME}",
   "description": "Generated TypeScript Axios client from OpenAPI for ${PROJECT_NAME}",
+  "version": "${VERSION}",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "module": "dist/index.js",
