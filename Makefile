@@ -42,12 +42,12 @@ js-generate:
 
 js-package:
 	echo "Generating package.json..."
-	@PACKAGE_NAME=$(PACKAGE_NAME) \
-	VERSION=$(VERSION_NO_V) \
-	PROJECT_NAME=$(PROJECT_NAME) \
-	AUTHOR=$(AUTHOR) \
-	REPOSITORY_URL=$(REPOSITORY_URL) \
-	bash -c 'eval "echo \"`cat $(TEMPLATE_DIR)/package.json.template`\""' > $(JS_CLIENT_DIR)/package.json
+	export PACKAGE_NAME=$(PACKAGE_NAME); \
+	export VERSION=$(VERSION_NO_V); \
+	export PROJECT_NAME=$(PROJECT_NAME); \
+	export AUTHOR=$(AUTHOR); \
+	export REPOSITORY_URL=$(REPOSITORY_URL); \
+	envsubst < $(TEMPLATE_DIR)/package.json.template > $(JS_CLIENT_DIR)/package.json
 
 js-tsconfig:
 	echo "Generating tsconfig.json..."
