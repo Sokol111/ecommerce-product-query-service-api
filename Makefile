@@ -15,6 +15,7 @@ install-tools:
 	@echo "Installing tools if missing..."
 	@which oapi-codegen >/dev/null || go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
 	@which openapi-generator-cli >/dev/null || npm install -g @openapitools/openapi-generator-cli
+	@which envsub >/dev/null || npm install -g envsub
 
 types:
 	echo "Generating types (models)..."
@@ -42,12 +43,12 @@ js-generate:
 
 js-package:
 	echo "Generating package.json..."
-	export PACKAGE_NAME=$(PACKAGE_NAME); \
-	export VERSION=$(VERSION_NO_V); \
-	export PROJECT_NAME=$(PROJECT_NAME); \
-	export AUTHOR=$(AUTHOR); \
-	export REPOSITORY_URL=$(REPOSITORY_URL); \
-	envsubst < $(TEMPLATE_DIR)/package.json.template > $(JS_CLIENT_DIR)/package.json
+	PACKAGE_NAME="$(PACKAGE_NAME)" \
+	VERSION_NO_V="$(VERSION_NO_V)" \
+	PROJECT_NAME="$(PROJECT_NAME)" \
+	AUTHOR="$(AUTHOR)" \
+	REPOSITORY_URL="$(REPOSITORY_URL)" \
+	envsub $(TEMPLATE_DIR)/package.json.template $(JS_CLIENT_DIR)/package.json
 
 js-tsconfig:
 	echo "Generating tsconfig.json..."
