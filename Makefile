@@ -55,13 +55,12 @@ js-tsconfig:
 	cp $(TEMPLATE_DIR)/tsconfig.json.template $(JS_CLIENT_DIR)/tsconfig.json
 
 js-build:
-	set -e; \
-	echo "Installing dependencies..."; \
-	cd $(JS_CLIENT_DIR) && npm install; \
-	echo "Building package..."; \
-	cd $(JS_CLIENT_DIR) && npm run build; \
-	echo "JS client ready in $(JS_CLIENT_DIR)/dist"; \
-	echo "Generated package.json:"; \
+	echo "Installing dependencies..."
+	cd $(JS_CLIENT_DIR) && npm install
+	echo "Building package..."
+	cd $(JS_CLIENT_DIR) && npm run build
+	echo "JS client ready in $(JS_CLIENT_DIR)/dist"
+	echo "Generated package.json:"
 	cat $(JS_CLIENT_DIR)/package.json
 
 js: js-generate js-package js-tsconfig js-build
