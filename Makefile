@@ -9,8 +9,6 @@ VERSION ?= 0.0.1
 VERSION_NO_V := $(VERSION:v%=%)
 TEMPLATE_DIR ?= template
 
-escape = $(shell printf '%s\n' "$(1)" | sed -e 's/[\/&]/\\&/g')
-
 .PHONY: install-tools types server client js-generate js-package js-tsconfig js-build js clean
 
 install-tools:
@@ -44,12 +42,12 @@ js-generate:
 
 js-package:
 	echo "Generating package.json..."
-	sed -e "s|\${PACKAGE_NAME}|$(call escape,$(PACKAGE_NAME))|g" \
-	    -e "s|\${VERSION}|$(call escape,$(VERSION_NO_V))|g" \
-	    -e "s|\${PROJECT_NAME}|$(call escape,$(PROJECT_NAME))|g" \
-	    -e "s|\${AUTHOR}|$(call escape,$(AUTHOR))|g" \
-	    -e "s|\${REPOSITORY_URL}|$(call escape,$(REPOSITORY_URL))|g" \
-	    $(TEMPLATE_DIR)/package.json.template > $(JS_CLIENT_DIR)/package.json
+	@PACKAGE_NAME=$(PACKAGE_NAME) \
+	VERSION=$(VERSION_NO_V) \
+	PROJECT_NAME=$(PROJECT_NAME) \
+	AUTHOR=$(AUTHOR) \
+	REPOSITORY_URL=$(REPOSITORY_URL) \
+	bash -c 'eval "echo \"`cat $(TEMPLATE_DIR)/package.json.template`\""' > $(JS_CLIENT_DIR)/package.json
 
 js-tsconfig:
 	echo "Generating tsconfig.json..."
