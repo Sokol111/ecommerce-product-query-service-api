@@ -13,9 +13,9 @@ TEMPLATE_DIR ?= template
 
 install-tools:
 	@echo "Installing tools if missing..."
-	@which oapi-codegen >/dev/null || go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
-	@which openapi-generator-cli >/dev/null || npm install -g @openapitools/openapi-generator-cli
-	@which envsub >/dev/null || npm install -g envsub
+	@which oapi-codegen >/dev/null || go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@v2.4.1
+	@which openapi-generator-cli >/dev/null || npm install -g @openapitools/openapi-generator-cli@2.20.2
+	@which envsub >/dev/null || npm install -g envsub@4.1.0
 
 types:
 	echo "Generating types (models)..."
