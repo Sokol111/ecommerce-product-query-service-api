@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Product query API
-  version: 1.0.4
+  version: 1.0.5
   description: API for querying products
 paths:
   /product/get/{id}:
@@ -27,25 +27,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-        "500":
-          description: Standard internal error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-  /product/list:
-    get:
-      summary: Get a list of all products
-      operationId: getAll
-      responses:
-        "200":
-          description: List of products retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ProductResponse"
         "500":
           description: Standard internal error
           content:
