@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Product query API
-  version: 1.0.12
+  version: 1.0.13
   description: API for querying products
 paths:
   /v1/product/get/{id}:
@@ -84,6 +84,9 @@ components:
         name:
           type: string
           example: "Smartphone model X"
+        description:
+          type: string
+          example: "High-quality smartphone with advanced features"
         price:
           type: number
           example: 10.50
