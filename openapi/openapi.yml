@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Product query API
-  version: 1.0.11
+  version: 1.0.12
   description: API for querying products
 paths:
   /v1/product/get/{id}:
@@ -90,6 +90,10 @@ components:
         quantity:
           type: integer
           example: 10
+        imageId:
+          type: string
+          description: ID of the product's main image
+          example: "550e8400-e29b-41d4-a716-446655440000"
     Problem:
       type: object
       description: RFC7807 Problem Details
