@@ -1,5 +1,6 @@
-api/
+# Generated code
+gen/
 js-client/
-generate-go-api.mk
-generate-js-api.mk
-openapitools.json
+
+# Go module files (changes ignored after initial commit)
+go.sum
