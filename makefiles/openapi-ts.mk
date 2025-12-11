@@ -3,7 +3,8 @@ OPENAPI_FILE ?= openapi/openapi.yml
 TS_API_DIR ?= gen/typescript
 PROJECT_NAME ?= $(notdir $(CURDIR))
 TS_PACKAGE_NAME ?= @sokol111/$(PROJECT_NAME)
-TS_VERSION ?= 1.0.0
+# Версія береться з OpenAPI файлу (info.version)
+TS_VERSION ?= $(shell grep -E '^\s+version:' $(OPENAPI_FILE) | head -1 | sed 's/.*version: *//' | tr -d ' ')
 
 # =============================================================================
 # OpenAPI TypeScript (orval)
