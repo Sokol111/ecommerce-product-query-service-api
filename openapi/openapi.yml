@@ -68,8 +68,97 @@ paths:
             application/problem+json:
               schema:
                 $ref: "#/components/schemas/Problem"
+  /v1/product/list:
+    get:
+      summary: Get a paginated list of products with filtering and sorting
+      operationId: getProductList
+      parameters:
+        - name: page
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            example: 1
+          description: Page number (must be greater than 0)
+        - name: size
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            example: 20
+          description: Number of items per page (max 100)
+        - name: categoryId
+          in: query
+          required: false
+          schema:
+            type: string
+            example: "123e4567-e89b-12d3-a456-426614174000"
+          description: Filter by category ID
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [name, price, quantity]
+            example: name
+          description: Field to sort by
+        - name: order
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+            example: desc
+          description: Sort order (ascending or descending)
+      responses:
+        "200":
+          description: List of products retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductListResponse"
+        "400":
+          description: Validation error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+        "500":
+          description: Standard internal error
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/Problem"
 components:
   schemas:
+    ProductListResponse:
+      type: object
+      required:
+        - items
+        - page
+        - size
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductResponse"
+        page:
+          type: integer
+          example: 1
+          description: Current page number
+        size:
+          type: integer
+          example: 20
+          description: Number of items per page
+        total:
+          type: integer
+          example: 100
+          description: Total number of items
     ProductResponse:
       type: object
       required:
