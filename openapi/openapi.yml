@@ -194,6 +194,37 @@ components:
           type: string
           description: ID of the product's category
           example: "123e4567-e89b-12d3-a456-426614174000"
+        attributes:
+          type: array
+          description: List of attribute values for this product
+          items:
+            $ref: "#/components/schemas/ProductAttribute"
+
+    ProductAttribute:
+      type: object
+      description: Product attribute with value
+      required:
+        - attributeId
+      properties:
+        attributeId:
+          type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+          description: Reference to the attribute definition
+        value:
+          type: string
+          example: "Red"
+          description: Single value (for single, boolean, text types)
+        values:
+          type: array
+          description: Multiple values (for multiple type)
+          items:
+            type: string
+          example: ["WiFi", "Bluetooth", "NFC"]
+        numericValue:
+          type: number
+          example: 128
+          description: Numeric value (for range type attributes like RAM, storage, weight)
+
     Problem:
       type: object
       description: RFC7807 Problem Details
