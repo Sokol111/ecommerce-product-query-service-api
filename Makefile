@@ -21,7 +21,7 @@ COLOR_RED := \033[31m
 .DEFAULT_GOAL := help
 
 # ---- Include makefiles ----
--include $(MAKEFILES_DIR)/openapi-go.mk
+-include $(MAKEFILES_DIR)/openapi-ogen.mk
 -include $(MAKEFILES_DIR)/openapi-ts.mk
 
 # =============================================================================
