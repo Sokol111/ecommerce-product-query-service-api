@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Product query API
-  version: 1.0.14
+  version: 1.0.15
   description: API for querying products
 paths:
   /v1/product/get/{id}:
@@ -114,6 +114,35 @@ paths:
             default: desc
             example: desc
           description: Sort order (ascending or descending)
+        - name: minPrice
+          in: query
+          required: false
+          schema:
+            type: number
+            minimum: 0
+          description: Minimum price filter
+        - name: maxPrice
+          in: query
+          required: false
+          schema:
+            type: number
+            minimum: 0
+          description: Maximum price filter
+        - name: attributeFilters
+          in: query
+          required: false
+          schema:
+            type: string
+          description: |
+            Dynamic attribute filters parsed from query string.
+            Format: slug=value1,value2 for single/multiple attributes.
+            Format: slug.min=X&slug.max=Y for range attributes.
+            Examples:
+              - color=red,blue (filter by color attribute with values red or blue)
+              - brand=apple,samsung (filter by brand)
+              - storage.min=128&storage.max=512 (filter by storage range)
+            Note: This parameter is for documentation. Actual filters are passed as
+            individual query parameters using attribute slugs directly.
       responses:
         "200":
           description: List of products retrieved successfully
@@ -205,11 +234,16 @@ components:
       description: Product attribute with value
       required:
         - attributeId
+        - slug
       properties:
         attributeId:
           type: string
           example: "123e4567-e89b-12d3-a456-426614174000"
           description: Reference to the attribute definition
+        slug:
+          type: string
+          example: "color"
+          description: URL-friendly identifier for filtering (denormalized from attribute definition)
         value:
           type: string
           example: "Red"
