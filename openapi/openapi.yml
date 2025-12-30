@@ -134,15 +134,9 @@ paths:
           schema:
             type: string
           description: |
-            Dynamic attribute filters parsed from query string.
-            Format: slug=value1,value2 for single/multiple attributes.
-            Format: slug.min=X&slug.max=Y for range attributes.
-            Examples:
-              - color=red,blue (filter by color attribute with values red or blue)
-              - brand=apple,samsung (filter by brand)
-              - storage.min=128&storage.max=512 (filter by storage range)
-            Note: This parameter is for documentation. Actual filters are passed as
-            individual query parameters using attribute slugs directly.
+            JSON-encoded array of attribute filters.
+            Each filter has: slug (string), values (string[]), min (number), max (number).
+            Example: [{"slug":"color","values":["red","blue"]},{"slug":"storage","min":128,"max":512}]
       responses:
         "200":
           description: List of products retrieved successfully
