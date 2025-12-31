@@ -238,20 +238,28 @@ components:
           type: string
           example: "color"
           description: URL-friendly identifier for filtering (denormalized from attribute definition)
-        value:
+        optionSlug:
           type: string
-          example: "Red"
-          description: Single value (for single, boolean, text types)
-        values:
+          example: "red"
+          description: Slug of the selected option (for single type)
+        optionSlugs:
           type: array
-          description: Multiple values (for multiple type)
+          description: Slugs of selected options (for multiple type)
           items:
             type: string
-          example: ["WiFi", "Bluetooth", "NFC"]
+          example: ["wifi", "bluetooth", "nfc"]
         numericValue:
           type: number
           example: 128
           description: Numeric value (for range type attributes like RAM, storage, weight)
+        textValue:
+          type: string
+          example: "Custom engraving text"
+          description: Free text value (for text type attributes)
+        booleanValue:
+          type: boolean
+          example: true
+          description: Boolean value (for boolean type attributes)
 
     Problem:
       type: object
