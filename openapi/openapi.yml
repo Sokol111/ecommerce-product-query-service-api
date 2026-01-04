@@ -238,11 +238,11 @@ components:
           type: string
           example: "color"
           description: URL-friendly identifier for filtering (denormalized from attribute definition)
-        optionSlug:
+        optionSlugValue:
           type: string
           example: "red"
           description: Slug of the selected option (for single type)
-        optionSlugs:
+        optionSlugValues:
           type: array
           description: Slugs of selected options (for multiple type)
           items:
