@@ -9,6 +9,7 @@ MAKEFLAGS += --no-builtin-rules
 # ---- Variables ----
 # Path to this repo's makefiles
 MAKEFILES_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))makefiles
+PROJECT_NAME ?= $(shell basename $(CURDIR))
 
 # Colors for output
 COLOR_RESET := \033[0m
@@ -52,7 +53,7 @@ setup: ## Setup local development (run once after clone)
 
 .PHONY: help
 help: ## Show available commands
-	@printf "\033[1m%s - Available targets:\033[0m\n\n" "ecommerce-product-service-api"
+	@printf "\033[1m%s - Available targets:\033[0m\n\n" "$(PROJECT_NAME)"
 	@awk 'BEGIN {FS = ":.*?## "; category = ""} \
 		/^# =+$$/ {getline; if ($$0 ~ /^# /) {gsub(/^# /, "", $$0); gsub(/ *$$/, "", $$0); category = $$0}} \
 		/^[a-zA-Z][a-zA-Z0-9-]+:.*?## / { \
