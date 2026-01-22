@@ -23,10 +23,13 @@ openapi-clean: ## Remove generated Go API files
 	@printf "$(COLOR_GREEN)✓ Cleaned $(API_DIR)/$(COLOR_RESET)\n"
 
 .PHONY: openapi-install-tools
-openapi-install-tools: ## Install OpenAPI tools (ogen)
+openapi-install-tools: ## Install OpenAPI tools (ogen, vacuum)
 	@printf "$(COLOR_BLUE)→ Installing ogen...$(COLOR_RESET)\n"
 	@go install github.com/ogen-go/ogen/cmd/ogen@latest
 	@printf "$(COLOR_GREEN)✓ ogen installed$(COLOR_RESET)\n"
+	@printf "$(COLOR_BLUE)→ Installing vacuum...$(COLOR_RESET)\n"
+	@go install github.com/daveshanley/vacuum@latest
+	@printf "$(COLOR_GREEN)✓ vacuum installed$(COLOR_RESET)\n"
 
 # ---- Internal targets ----
 
@@ -39,6 +42,13 @@ _openapi-check-tools:
 		exit 1; \
 	fi
 	@printf "$(COLOR_GREEN)✓ ogen found: $(OGEN)$(COLOR_RESET)\n"
+	@if ! command -v vacuum >/dev/null 2>&1; then \
+		printf "$(COLOR_RED)✗ vacuum not found$(COLOR_RESET)\n"; \
+		printf "$(COLOR_YELLOW)  Install: go install github.com/daveshanley/vacuum@latest$(COLOR_RESET)\n"; \
+		printf "$(COLOR_YELLOW)  Or run: make openapi-install-tools$(COLOR_RESET)\n"; \
+		exit 1; \
+	fi
+	@printf "$(COLOR_GREEN)✓ vacuum found$(COLOR_RESET)\n"
 
 .PHONY: _openapi-create-dir
 _openapi-create-dir:
@@ -47,15 +57,10 @@ _openapi-create-dir:
 .PHONY: _openapi-gen
 _openapi-gen:
 	@printf "$(COLOR_BLUE)→ Generating Go code with ogen...$(COLOR_RESET)\n"
-	@$(OGEN) -target $(API_DIR) -package $(PACKAGE) -clean $(OPENAPI_FILE)
+	@$(OGEN) -target $(API_DIR) -package $(PACKAGE) -clean -config ogen.yml $(OPENAPI_FILE)
 
 .PHONY: _openapi-gen-embed
 _openapi-gen-embed:
-	@printf "$(COLOR_BLUE)→ Embedding OpenAPI spec...$(COLOR_RESET)\n"
-	@cp $(OPENAPI_FILE) $(API_DIR)/openapi.yml
-	@echo "package $(PACKAGE)" > $(API_DIR)/openapi_embed.gen.go
-	@echo "" >> $(API_DIR)/openapi_embed.gen.go
-	@echo "import _ \"embed\"" >> $(API_DIR)/openapi_embed.gen.go
-	@echo "" >> $(API_DIR)/openapi_embed.gen.go
-	@echo "//go:embed openapi.yml" >> $(API_DIR)/openapi_embed.gen.go
-	@echo "var OpenAPIDoc []byte" >> $(API_DIR)/openapi_embed.gen.go
+	@printf "$(COLOR_BLUE)→ Bundling and embedding OpenAPI spec...$(COLOR_RESET)\n"
+	@cd $(dir $(OPENAPI_FILE)) && vacuum bundle $(notdir $(OPENAPI_FILE)) $(CURDIR)/$(API_DIR)/openapi.yml
+	@printf "package $(PACKAGE)\n\nimport _ \"embed\"\n\n//go:embed openapi.yml\nvar OpenAPIDoc []byte\n" > $(CURDIR)/$(API_DIR)/openapi_embed.gen.go
