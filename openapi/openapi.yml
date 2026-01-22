@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Product query API
-  version: 1.0.15
+  version: 1.0.16
   description: API for querying products
 paths:
   /v1/product/get/{id}:
@@ -233,6 +233,7 @@ components:
         - type
         - role
         - sortOrder
+        - values
       properties:
         attributeId:
           type: string
@@ -264,42 +265,36 @@ components:
           type: integer
           example: 1
           description: Display order of the attribute in category
-        optionSlugValue:
+        values:
+          type: array
+          description: |
+            Attribute values in unified format.
+            - single: [{slug: "red", value: "Red", colorCode: "#FF0000"}]
+            - multiple: [{slug: "wifi", value: "WiFi"}, {slug: "bt", value: "Bluetooth"}]
+            - range: [{value: "128"}]
+            - boolean: [{value: "true"}] or [{value: "false"}]
+            - text: [{value: "Custom engraving"}]
+          items:
+            $ref: "#/components/schemas/AttributeValue"
+
+    AttributeValue:
+      type: object
+      description: Single attribute value
+      required:
+        - value
+      properties:
+        slug:
           type: string
           example: "red"
-          description: Slug of the selected option (for single type)
-        optionSlugValues:
-          type: array
-          description: Slugs of selected options (for multiple type)
-          items:
-            type: string
-          example: ["wifi", "bluetooth", "nfc"]
-        optionName:
+          description: Option slug for single/multiple types (used for filtering)
+        value:
           type: string
           example: "Red"
-          description: Display name of selected option (for single type)
-        optionNames:
-          type: array
-          description: Display names of selected options (for multiple type)
-          items:
-            type: string
-          example: ["WiFi", "Bluetooth", "NFC"]
-        optionColorCode:
+          description: Display value (option name, number, boolean, or text)
+        colorCode:
           type: string
           example: "#FF0000"
           description: Hex color code for color attributes
-        numericValue:
-          type: number
-          example: 128
-          description: Numeric value (for range type attributes)
-        textValue:
-          type: string
-          example: "Custom engraving text"
-          description: Free text value (for text type attributes)
-        booleanValue:
-          type: boolean
-          example: true
-          description: Boolean value (for boolean type attributes)
 
     Problem:
       type: object
