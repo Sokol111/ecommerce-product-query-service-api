@@ -221,9 +221,9 @@ components:
           type: array
           description: List of attribute values for this product
           items:
-            $ref: "#/components/schemas/ProductAttribute"
+            $ref: "#/components/schemas/AttributeValue"
 
-    ProductAttribute:
+    AttributeValue:
       type: object
       description: Product attribute with value and display information
       required:
@@ -275,9 +275,9 @@ components:
             - boolean: [{value: "true"}] or [{value: "false"}]
             - text: [{value: "Custom engraving"}]
           items:
-            $ref: "#/components/schemas/AttributeValue"
+            $ref: "#/components/schemas/AttributeValueItem"
 
-    AttributeValue:
+    AttributeValueItem:
       type: object
       description: Single attribute value
       required:
