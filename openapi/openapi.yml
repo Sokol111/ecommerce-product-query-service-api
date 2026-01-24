@@ -209,10 +209,14 @@ components:
           type: string
           description: ID of the product's main image
           example: "550e8400-e29b-41d4-a716-446655440000"
-        imageUrl:
+        smallImageUrl:
           type: string
-          description: URL of the product's main image
-          example: "https://cdn.example.com/images/550e8400-e29b-41d4-a716-446655440000.jpg"
+          description: Small image URL (400px) for thumbnails and listings
+          example: "https://cdn.example.com/images/550e8400-e29b-41d4-a716-446655440000_400.jpg"
+        largeImageUrl:
+          type: string
+          description: Large image URL (800px) for product detail pages
+          example: "https://cdn.example.com/images/550e8400-e29b-41d4-a716-446655440000_800.jpg"
         categoryId:
           type: string
           description: ID of the product's category
