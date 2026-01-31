@@ -1,6 +1,4 @@
-# Generated code
-gen/
-js-client/
-
-# Go module files (changes ignored after initial commit)
-go.sum
+# TypeScript build artifacts (source is committed)
+gen/typescript/node_modules/
+gen/typescript/dist/
+gen/typescript/package-lock.json

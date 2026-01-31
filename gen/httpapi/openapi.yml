@@ -1,0 +1,342 @@
+openapi: 3.0.0
+info:
+    title: Product query API
+    version: 1.0.17
+    description: API for querying products
+paths:
+    /v1/product/get/{id}:
+        get:
+            summary: Get a product by ID
+            operationId: getProductById
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: Product retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ProductResponse"
+                "404":
+                    description: Product not found
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: "#/components/schemas/Problem"
+                "500":
+                    description: Standard internal error
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: "#/components/schemas/Problem"
+    /v1/product/random:
+        get:
+            summary: Get random products
+            operationId: getRandomProducts
+            parameters:
+                - name: count
+                  in: query
+                  required: true
+                  schema:
+                    type: integer
+                    minimum: 1
+                    maximum: 20
+                    example: 5
+                  description: Number of random products to retrieve (1-20)
+            responses:
+                "200":
+                    description: Random products retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/ProductResponse"
+                "400":
+                    description: Validation error
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: "#/components/schemas/Problem"
+                "500":
+                    description: Standard internal error
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: "#/components/schemas/Problem"
+    /v1/product/list:
+        get:
+            summary: Get a paginated list of products with filtering and sorting
+            operationId: getProductList
+            parameters:
+                - name: page
+                  in: query
+                  required: true
+                  schema:
+                    type: integer
+                    minimum: 1
+                    example: 1
+                  description: Page number (must be greater than 0)
+                - name: size
+                  in: query
+                  required: true
+                  schema:
+                    type: integer
+                    minimum: 1
+                    maximum: 100
+                    example: 20
+                  description: Number of items per page (max 100)
+                - name: categoryId
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+                  description: Filter by category ID
+                - name: sort
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                    enum:
+                        - name
+                        - price
+                        - quantity
+                    example: name
+                  description: Field to sort by
+                - name: order
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                    enum:
+                        - asc
+                        - desc
+                    default: desc
+                    example: desc
+                  description: Sort order (ascending or descending)
+                - name: minPrice
+                  in: query
+                  required: false
+                  schema:
+                    type: number
+                    minimum: 0
+                  description: Minimum price filter
+                - name: maxPrice
+                  in: query
+                  required: false
+                  schema:
+                    type: number
+                    minimum: 0
+                  description: Maximum price filter
+                - name: attributeFilters
+                  in: query
+                  required: false
+                  schema:
+                    type: string
+                  description: |
+                    JSON-encoded array of attribute filters.
+                    Each filter has: slug (string), values (string[]), min (number), max (number).
+                    Example: [{"slug":"color","values":["red","blue"]},{"slug":"storage","min":128,"max":512}]
+            responses:
+                "200":
+                    description: List of products retrieved successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ProductListResponse"
+                "400":
+                    description: Validation error
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: "#/components/schemas/Problem"
+                "500":
+                    description: Standard internal error
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: "#/components/schemas/Problem"
+components:
+    schemas:
+        ProductListResponse:
+            type: object
+            required:
+                - items
+                - page
+                - size
+                - total
+            properties:
+                items:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/ProductResponse"
+                page:
+                    type: integer
+                    example: 1
+                    description: Current page number
+                size:
+                    type: integer
+                    example: 20
+                    description: Number of items per page
+                total:
+                    type: integer
+                    example: 100
+                    description: Total number of items
+        ProductResponse:
+            type: object
+            required:
+                - id
+                - name
+                - price
+                - quantity
+            properties:
+                id:
+                    type: string
+                    example: "678b74a36fc2b2605c6f579d"
+                name:
+                    type: string
+                    example: "Smartphone model X"
+                description:
+                    type: string
+                    example: "High-quality smartphone with advanced features"
+                price:
+                    type: number
+                    example: 10.50
+                quantity:
+                    type: integer
+                    example: 10
+                imageId:
+                    type: string
+                    description: ID of the product's main image
+                    example: "550e8400-e29b-41d4-a716-446655440000"
+                smallImageUrl:
+                    type: string
+                    description: Small image URL (400px) for thumbnails and listings
+                    example: "https://cdn.example.com/images/550e8400-e29b-41d4-a716-446655440000_400.jpg"
+                largeImageUrl:
+                    type: string
+                    description: Large image URL (800px) for product detail pages
+                    example: "https://cdn.example.com/images/550e8400-e29b-41d4-a716-446655440000_800.jpg"
+                categoryId:
+                    type: string
+                    description: ID of the product's category
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+                attributes:
+                    type: array
+                    description: List of attribute values for this product
+                    items:
+                        $ref: "#/components/schemas/AttributeValue"
+        AttributeValue:
+            type: object
+            description: Product attribute with value and display information
+            required:
+                - attributeId
+                - slug
+                - name
+                - type
+                - role
+                - sortOrder
+                - values
+            properties:
+                attributeId:
+                    type: string
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+                    description: Reference to the attribute definition
+                slug:
+                    type: string
+                    example: "color"
+                    description: URL-friendly identifier for filtering
+                name:
+                    type: string
+                    example: "Color"
+                    description: Display name of the attribute
+                type:
+                    type: string
+                    enum:
+                        - single
+                        - multiple
+                        - range
+                        - boolean
+                        - text
+                    example: "single"
+                    description: Attribute type for rendering
+                unit:
+                    type: string
+                    example: "GB"
+                    description: Unit for range type attributes
+                role:
+                    type: string
+                    enum:
+                        - variant
+                        - specification
+                    example: "variant"
+                    description: How attribute is used (variant for selection, specification for display)
+                sortOrder:
+                    type: integer
+                    example: 1
+                    description: Display order of the attribute in category
+                values:
+                    type: array
+                    description: |
+                        Attribute values in unified format.
+                        - single: [{slug: "red", value: "Red", colorCode: "#FF0000"}]
+                        - multiple: [{slug: "wifi", value: "WiFi"}, {slug: "bt", value: "Bluetooth"}]
+                        - range: [{value: "128"}]
+                        - boolean: [{value: "true"}] or [{value: "false"}]
+                        - text: [{value: "Custom engraving"}]
+                    items:
+                        $ref: "#/components/schemas/AttributeValueItem"
+        AttributeValueItem:
+            type: object
+            description: Single attribute value
+            required:
+                - value
+            properties:
+                slug:
+                    type: string
+                    example: "red"
+                    description: Option slug for single/multiple types (used for filtering)
+                value:
+                    type: string
+                    example: "Red"
+                    description: Display value (option name, number, boolean, or text)
+                colorCode:
+                    type: string
+                    example: "#FF0000"
+                    description: Hex color code for color attributes
+        Problem:
+            type: object
+            description: RFC7807 Problem Details
+            required:
+                - type
+                - title
+                - status
+            properties:
+                type:
+                    type: string
+                    format: uri
+                title:
+                    type: string
+                status:
+                    type: integer
+                detail:
+                    type: string
+                instance:
+                    type: string
+                    format: uri
+                traceId:
+                    type: string
+                errors:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            field:
+                                type: string
+                            message:
+                                type: string

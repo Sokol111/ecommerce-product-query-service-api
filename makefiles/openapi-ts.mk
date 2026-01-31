@@ -17,9 +17,9 @@ openapi-ts-generate: _openapi-ts-clean _openapi-ts-gen _openapi-ts-package-json 
 	@printf "$(COLOR_BLUE)  Location: $(TS_API_DIR)/$(COLOR_RESET)\n"
 
 .PHONY: openapi-ts-generate-fast
-openapi-ts-generate-fast: _openapi-ts-clean _openapi-ts-gen _openapi-ts-package-json _openapi-ts-tsconfig ## Generate TypeScript API (no build, for local file: usage)
-	@printf "$(COLOR_GREEN)✓ TypeScript API generation complete (no build)!$(COLOR_RESET)\n"
-	@printf "$(COLOR_YELLOW)  Note: build will run automatically on npm install$(COLOR_RESET)\n"
+openapi-ts-generate-fast: _openapi-ts-clean _openapi-ts-gen _openapi-ts-package-json _openapi-ts-tsconfig _openapi-ts-index ## Generate TypeScript API (no build, for committing to git)
+	@printf "$(COLOR_GREEN)✓ TypeScript API generation complete (source only)!$(COLOR_RESET)\n"
+	@printf "$(COLOR_YELLOW)  Note: CI will build before publishing$(COLOR_RESET)\n"
 	@printf "$(COLOR_BLUE)  Package: $(TS_PACKAGE_NAME)@$(TS_VERSION)$(COLOR_RESET)\n"
 	@printf "$(COLOR_BLUE)  Location: $(TS_API_DIR)/$(COLOR_RESET)\n"
 

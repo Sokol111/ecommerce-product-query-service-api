@@ -1,0 +1,6 @@
+# ogen configuration file
+# See: https://ogen.dev/docs/spec/configuration
+
+parser:
+  # Allow resolving external/remote $ref references (required for multi-file OpenAPI)
+  allow_remote: true
