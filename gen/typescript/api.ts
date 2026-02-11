@@ -3,7 +3,7 @@
  * Do not edit manually.
  * Product query API
  * API for querying products
- * OpenAPI spec version: 1.0.19
+ * OpenAPI spec version: 1.0.20
  */
 import axios from 'axios';
 import type {
