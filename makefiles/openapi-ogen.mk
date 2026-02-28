@@ -11,7 +11,7 @@ OGEN ?= $(shell which ogen 2>/dev/null || echo "$(HOME)/go/bin/ogen")
 # =============================================================================
 
 .PHONY: openapi-generate
-openapi-generate: _openapi-check-tools _openapi-create-dir _openapi-gen _openapi-gen-helpers _openapi-gen-embed ## Generate Go API (types, server, client) from OpenAPI spec using ogen
+openapi-generate: _openapi-check-tools _openapi-clean-dir _openapi-gen _openapi-gen-helpers _openapi-gen-embed ## Generate Go API (types, server, client) from OpenAPI spec using ogen
 	@printf "$(COLOR_GREEN)✓ Go API generation complete!$(COLOR_RESET)\n"
 	@printf "$(COLOR_BLUE)  Generated files in $(API_DIR)/:$(COLOR_RESET)\n"
 	@ls -la $(API_DIR)/*.go 2>/dev/null | awk '{print "    " $$NF}'
@@ -50,8 +50,10 @@ _openapi-check-tools:
 	fi
 	@printf "$(COLOR_GREEN)✓ vacuum found$(COLOR_RESET)\n"
 
-.PHONY: _openapi-create-dir
-_openapi-create-dir:
+.PHONY: _openapi-clean-dir
+_openapi-clean-dir:
+	@printf "$(COLOR_BLUE)→ Cleaning generated Go API files...$(COLOR_RESET)\n"
+	@rm -rf $(API_DIR)
 	@mkdir -p $(API_DIR)
 
 .PHONY: _openapi-gen
