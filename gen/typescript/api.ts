@@ -3,63 +3,190 @@
  * Do not edit manually.
  * Product query API
  * API for querying products
- * OpenAPI spec version: 1.0.22
+ * OpenAPI spec version: 1.0.23
  */
-import axios from 'axios';
-import type {
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   GetProductListParams,
   GetRandomProductsParams,
+  Problem,
   ProductListResponse,
   ProductResponse
 } from './api.schemas';
 
 
-
-
-  export const getProductQueryAPI = () => {
 /**
  * @summary Get a product by ID
  */
-const getProductById = <TData = AxiosResponse<ProductResponse>>(
-    id: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/v1/product/get/${id}`,options
-    );
+export type getProductByIdResponse200 = {
+  data: ProductResponse
+  status: 200
+}
+
+export type getProductByIdResponse404 = {
+  data: Problem
+  status: 404
+}
+
+export type getProductByIdResponse500 = {
+  data: Problem
+  status: 500
+}
+    
+export type getProductByIdResponseSuccess = (getProductByIdResponse200) & {
+  headers: Headers;
+};
+export type getProductByIdResponseError = (getProductByIdResponse404 | getProductByIdResponse500) & {
+  headers: Headers;
+};
+
+export type getProductByIdResponse = (getProductByIdResponseSuccess | getProductByIdResponseError)
+
+export const getGetProductByIdUrl = (id: string,) => {
+
+
+  
+
+  return `/v1/product/get/${id}`
+}
+
+export const getProductById = async (id: string, options?: RequestInit): Promise<getProductByIdResponse> => {
+  
+  const res = await fetch(getGetProductByIdUrl(id),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
   }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getProductByIdResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getProductByIdResponse
+}
+
+
 
 /**
  * @summary Get random products
  */
-const getRandomProducts = <TData = AxiosResponse<ProductResponse[]>>(
-    params: GetRandomProductsParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/v1/product/random`,{
+export type getRandomProductsResponse200 = {
+  data: ProductResponse[]
+  status: 200
+}
+
+export type getRandomProductsResponse400 = {
+  data: Problem
+  status: 400
+}
+
+export type getRandomProductsResponse500 = {
+  data: Problem
+  status: 500
+}
+    
+export type getRandomProductsResponseSuccess = (getRandomProductsResponse200) & {
+  headers: Headers;
+};
+export type getRandomProductsResponseError = (getRandomProductsResponse400 | getRandomProductsResponse500) & {
+  headers: Headers;
+};
+
+export type getRandomProductsResponse = (getRandomProductsResponseSuccess | getRandomProductsResponseError)
+
+export const getGetRandomProductsUrl = (params: GetRandomProductsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/v1/product/random?${stringifiedParams}` : `/v1/product/random`
+}
+
+export const getRandomProducts = async (params: GetRandomProductsParams, options?: RequestInit): Promise<getRandomProductsResponse> => {
+  
+  const res = await fetch(getGetRandomProductsUrl(params),
+  {      
     ...options,
-        params: {...params, ...options?.params},}
-    );
+    method: 'GET'
+    
+    
   }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getRandomProductsResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getRandomProductsResponse
+}
+
+
 
 /**
  * @summary Get a paginated list of products with filtering and sorting
  */
-const getProductList = <TData = AxiosResponse<ProductListResponse>>(
-    params: GetProductListParams, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/v1/product/list`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
+export type getProductListResponse200 = {
+  data: ProductListResponse
+  status: 200
+}
 
-return {getProductById,getRandomProducts,getProductList}};
-export type GetProductByIdResult = AxiosResponse<ProductResponse>
-export type GetRandomProductsResult = AxiosResponse<ProductResponse[]>
-export type GetProductListResult = AxiosResponse<ProductListResponse>
+export type getProductListResponse400 = {
+  data: Problem
+  status: 400
+}
+
+export type getProductListResponse500 = {
+  data: Problem
+  status: 500
+}
+    
+export type getProductListResponseSuccess = (getProductListResponse200) & {
+  headers: Headers;
+};
+export type getProductListResponseError = (getProductListResponse400 | getProductListResponse500) & {
+  headers: Headers;
+};
+
+export type getProductListResponse = (getProductListResponseSuccess | getProductListResponseError)
+
+export const getGetProductListUrl = (params: GetProductListParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/v1/product/list?${stringifiedParams}` : `/v1/product/list`
+}
+
+export const getProductList = async (params: GetProductListParams, options?: RequestInit): Promise<getProductListResponse> => {
+  
+  const res = await fetch(getGetProductListUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getProductListResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getProductListResponse
+}
+
+
+

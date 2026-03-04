@@ -1,7 +1,7 @@
 {
   "name": "@sokol111/ecommerce-product-query-service-api",
-  "description": "Generated TypeScript Axios client from OpenAPI for ecommerce-product-query-service-api",
-  "version": "1.0.22",
+  "description": "Generated TypeScript Fetch client from OpenAPI for ecommerce-product-query-service-api",
+  "version": "1.0.23",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "module": "dist/index.js",
@@ -9,11 +9,8 @@
     "build": "tsc",
     "prepare": "npm run build"
   },
-  "keywords": ["openapi", "typescript", "axios", "sdk"],
+  "keywords": ["openapi", "typescript", "fetch", "sdk"],
   "license": "MIT",
-  "dependencies": {
-    "axios": "^1.10.0"
-  },
   "devDependencies": {
     "typescript": "^5"
   },

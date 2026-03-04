@@ -45,18 +45,18 @@ _openapi-ts-clean:
 
 .PHONY: _openapi-ts-gen
 _openapi-ts-gen:
-	@printf "$(COLOR_BLUE)→ Generating TypeScript client (orval + axios)...$(COLOR_RESET)\n"
+	@printf "$(COLOR_BLUE)→ Generating TypeScript client (orval + fetch)...$(COLOR_RESET)\n"
 	@npx orval \
 		--input $(OPENAPI_FILE) \
 		--output $(TS_API_DIR)/api.ts \
-		--client axios \
+		--client fetch \
 		--mode split
 
 .PHONY: _openapi-ts-package-json
 _openapi-ts-package-json:
 	@printf "$(COLOR_BLUE)→ Generating package.json...$(COLOR_RESET)\n"
 	@VERSION_NO_V=$$(echo "$(TS_VERSION)" | sed 's/^v//'); \
-	printf '{\n  "name": "%s",\n  "description": "Generated TypeScript Axios client from OpenAPI for %s",\n  "version": "%s",\n  "main": "dist/index.js",\n  "types": "dist/index.d.ts",\n  "module": "dist/index.js",\n  "scripts": {\n    "build": "tsc",\n    "prepare": "npm run build"\n  },\n  "keywords": ["openapi", "typescript", "axios", "sdk"],\n  "license": "MIT",\n  "dependencies": {\n    "axios": "^1.10.0"\n  },\n  "devDependencies": {\n    "typescript": "^5"\n  },\n  "publishConfig": {\n    "access": "public"\n  },\n  "files": [\n    "dist"\n  ]\n}\n' \
+	printf '{\n  "name": "%s",\n  "description": "Generated TypeScript Fetch client from OpenAPI for %s",\n  "version": "%s",\n  "main": "dist/index.js",\n  "types": "dist/index.d.ts",\n  "module": "dist/index.js",\n  "scripts": {\n    "build": "tsc",\n    "prepare": "npm run build"\n  },\n  "keywords": ["openapi", "typescript", "fetch", "sdk"],\n  "license": "MIT",\n  "devDependencies": {\n    "typescript": "^5"\n  },\n  "publishConfig": {\n    "access": "public"\n  },\n  "files": [\n    "dist"\n  ]\n}\n' \
 		"$(TS_PACKAGE_NAME)" "$(PROJECT_NAME)" "$$VERSION_NO_V" > $(TS_API_DIR)/package.json
 
 .PHONY: _openapi-ts-tsconfig
