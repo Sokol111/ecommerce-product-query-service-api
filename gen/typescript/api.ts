@@ -3,7 +3,7 @@
  * Do not edit manually.
  * Product query API
  * API for querying products
- * OpenAPI spec version: 1.0.23
+ * OpenAPI spec version: 1.0.24
  */
 import type {
   FacetsResponse,
