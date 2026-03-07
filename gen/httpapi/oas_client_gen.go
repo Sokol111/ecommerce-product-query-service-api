@@ -33,6 +33,13 @@ type Invoker interface {
 	//
 	// GET /v1/product/get/{id}
 	GetProductById(ctx context.Context, params GetProductByIdParams) (GetProductByIdRes, error)
+	// GetProductFacets invokes getProductFacets operation.
+	//
+	// Returns available attribute values (facets) computed from actual products in a category.
+	// Used to build dynamic filter UI that only shows options with matching products.
+	//
+	// GET /v1/product/facets
+	GetProductFacets(ctx context.Context, params GetProductFacetsParams) (GetProductFacetsRes, error)
 	// GetProductList invokes getProductList operation.
 	//
 	// Get a paginated list of products with filtering and sorting.
@@ -174,6 +181,98 @@ func (c *Client) sendGetProductById(ctx context.Context, params GetProductByIdPa
 
 	stage = "DecodeResponse"
 	result, err := decodeGetProductByIdResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// GetProductFacets invokes getProductFacets operation.
+//
+// Returns available attribute values (facets) computed from actual products in a category.
+// Used to build dynamic filter UI that only shows options with matching products.
+//
+// GET /v1/product/facets
+func (c *Client) GetProductFacets(ctx context.Context, params GetProductFacetsParams) (GetProductFacetsRes, error) {
+	res, err := c.sendGetProductFacets(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendGetProductFacets(ctx context.Context, params GetProductFacetsParams) (res GetProductFacetsRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("getProductFacets"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.URLTemplateKey.String("/v1/product/facets"),
+	}
+	otelAttrs = append(otelAttrs, c.cfg.Attributes...)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, GetProductFacetsOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/product/facets"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "categoryId" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "categoryId",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			return e.EncodeValue(conv.StringToString(params.CategoryId))
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeGetProductFacetsResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

@@ -118,6 +118,48 @@ export interface Problem {
   errors?: ProblemErrorsItem[];
 }
 
+export interface FacetsResponse {
+  /** Available attribute facets computed from actual products */
+  facets: AttributeFacet[];
+  priceRange: PriceRange;
+}
+
+/**
+ * Facet for a single attribute showing available values and counts.
+Use attribute slug to join with CategoryAttribute from CategoryResponse for display data (name, type, unit, colorCode).
+
+ */
+export interface AttributeFacet {
+  /** Attribute slug to match with CategoryAttribute.slug */
+  slug: string;
+  /** Available values with product counts.
+- single/multiple: option slug values with counts
+- range: numeric values with counts
+- boolean: true/false with counts
+ */
+  values: FacetValue[];
+}
+
+/**
+ * A single facet value with product count
+ */
+export interface FacetValue {
+  /** Option slug (single/multiple), numeric string (range), or boolean string */
+  value: string;
+  /** Number of products with this value */
+  count: number;
+}
+
+/**
+ * Price range across all products in the category
+ */
+export interface PriceRange {
+  /** Minimum product price in category */
+  min: number;
+  /** Maximum product price in category */
+  max: number;
+}
+
 export type GetRandomProductsParams = {
 /**
  * Number of random products to retrieve (1-20)
@@ -188,4 +230,11 @@ export const GetProductListOrder = {
   asc: 'asc',
   desc: 'desc',
 } as const;
+
+export type GetProductFacetsParams = {
+/**
+ * Category ID to compute facets for
+ */
+categoryId: string;
+};
 

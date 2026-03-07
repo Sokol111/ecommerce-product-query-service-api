@@ -61,6 +61,26 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
+			case 'f': // Prefix: "facets"
+
+				if l := len("facets"); len(elem) >= l && elem[0:l] == "facets" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch r.Method {
+					case "GET":
+						s.handleGetProductFacetsRequest([0]string{}, elemIsEscaped, w, r)
+					default:
+						s.notAllowed(w, r, "GET")
+					}
+
+					return
+				}
+
 			case 'g': // Prefix: "get/"
 
 				if l := len("get/"); len(elem) >= l && elem[0:l] == "get/" {
@@ -232,6 +252,31 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
+			case 'f': // Prefix: "facets"
+
+				if l := len("facets"); len(elem) >= l && elem[0:l] == "facets" {
+					elem = elem[l:]
+				} else {
+					break
+				}
+
+				if len(elem) == 0 {
+					// Leaf node.
+					switch method {
+					case "GET":
+						r.name = GetProductFacetsOperation
+						r.summary = "Get attribute facets for filtering products"
+						r.operationID = "getProductFacets"
+						r.operationGroup = ""
+						r.pathPattern = "/v1/product/facets"
+						r.args = args
+						r.count = 0
+						return r, true
+					default:
+						return
+					}
+				}
+
 			case 'g': // Prefix: "get/"
 
 				if l := len("get/"); len(elem) >= l && elem[0:l] == "get/" {

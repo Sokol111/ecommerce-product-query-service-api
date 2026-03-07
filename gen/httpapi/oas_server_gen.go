@@ -14,6 +14,13 @@ type Handler interface {
 	//
 	// GET /v1/product/get/{id}
 	GetProductById(ctx context.Context, params GetProductByIdParams) (GetProductByIdRes, error)
+	// GetProductFacets implements getProductFacets operation.
+	//
+	// Returns available attribute values (facets) computed from actual products in a category.
+	// Used to build dynamic filter UI that only shows options with matching products.
+	//
+	// GET /v1/product/facets
+	GetProductFacets(ctx context.Context, params GetProductFacetsParams) (GetProductFacetsRes, error)
 	// GetProductList implements getProductList operation.
 	//
 	// Get a paginated list of products with filtering and sorting.

@@ -8,6 +8,40 @@ import (
 	"github.com/go-faster/errors"
 )
 
+// Facet for a single attribute showing available values and counts.
+// Use attribute slug to join with CategoryAttribute from CategoryResponse for display data (name,
+// type, unit, colorCode).
+// Ref: #/components/schemas/AttributeFacet
+type AttributeFacet struct {
+	// Attribute slug to match with CategoryAttribute.slug.
+	Slug string `json:"slug"`
+	// Available values with product counts.
+	// - single/multiple: option slug values with counts
+	// - range: numeric values with counts
+	// - boolean: true/false with counts.
+	Values []FacetValue `json:"values"`
+}
+
+// GetSlug returns the value of Slug.
+func (s *AttributeFacet) GetSlug() string {
+	return s.Slug
+}
+
+// GetValues returns the value of Values.
+func (s *AttributeFacet) GetValues() []FacetValue {
+	return s.Values
+}
+
+// SetSlug sets the value of Slug.
+func (s *AttributeFacet) SetSlug(val string) {
+	s.Slug = val
+}
+
+// SetValues sets the value of Values.
+func (s *AttributeFacet) SetValues(val []FacetValue) {
+	s.Values = val
+}
+
 // Product attribute with value and display information.
 // Ref: #/components/schemas/AttributeValue
 type AttributeValue struct {
@@ -260,6 +294,64 @@ func (s *AttributeValueType) UnmarshalText(data []byte) error {
 	}
 }
 
+// A single facet value with product count.
+// Ref: #/components/schemas/FacetValue
+type FacetValue struct {
+	// Option slug (single/multiple), numeric string (range), or boolean string.
+	Value string `json:"value"`
+	// Number of products with this value.
+	Count int `json:"count"`
+}
+
+// GetValue returns the value of Value.
+func (s *FacetValue) GetValue() string {
+	return s.Value
+}
+
+// GetCount returns the value of Count.
+func (s *FacetValue) GetCount() int {
+	return s.Count
+}
+
+// SetValue sets the value of Value.
+func (s *FacetValue) SetValue(val string) {
+	s.Value = val
+}
+
+// SetCount sets the value of Count.
+func (s *FacetValue) SetCount(val int) {
+	s.Count = val
+}
+
+// Ref: #/components/schemas/FacetsResponse
+type FacetsResponse struct {
+	// Available attribute facets computed from actual products.
+	Facets     []AttributeFacet `json:"facets"`
+	PriceRange PriceRange       `json:"priceRange"`
+}
+
+// GetFacets returns the value of Facets.
+func (s *FacetsResponse) GetFacets() []AttributeFacet {
+	return s.Facets
+}
+
+// GetPriceRange returns the value of PriceRange.
+func (s *FacetsResponse) GetPriceRange() PriceRange {
+	return s.PriceRange
+}
+
+// SetFacets sets the value of Facets.
+func (s *FacetsResponse) SetFacets(val []AttributeFacet) {
+	s.Facets = val
+}
+
+// SetPriceRange sets the value of PriceRange.
+func (s *FacetsResponse) SetPriceRange(val PriceRange) {
+	s.PriceRange = val
+}
+
+func (*FacetsResponse) getProductFacetsRes() {}
+
 type GetProductByIdInternalServerError Problem
 
 func (*GetProductByIdInternalServerError) getProductByIdRes() {}
@@ -267,6 +359,14 @@ func (*GetProductByIdInternalServerError) getProductByIdRes() {}
 type GetProductByIdNotFound Problem
 
 func (*GetProductByIdNotFound) getProductByIdRes() {}
+
+type GetProductFacetsBadRequest Problem
+
+func (*GetProductFacetsBadRequest) getProductFacetsRes() {}
+
+type GetProductFacetsInternalServerError Problem
+
+func (*GetProductFacetsInternalServerError) getProductFacetsRes() {}
 
 type GetProductListBadRequest Problem
 
@@ -605,6 +705,35 @@ func (o OptURI) Or(d url.URL) url.URL {
 		return v
 	}
 	return d
+}
+
+// Price range across all products in the category.
+// Ref: #/components/schemas/PriceRange
+type PriceRange struct {
+	// Minimum product price in category.
+	Min float64 `json:"min"`
+	// Maximum product price in category.
+	Max float64 `json:"max"`
+}
+
+// GetMin returns the value of Min.
+func (s *PriceRange) GetMin() float64 {
+	return s.Min
+}
+
+// GetMax returns the value of Max.
+func (s *PriceRange) GetMax() float64 {
+	return s.Max
+}
+
+// SetMin sets the value of Min.
+func (s *PriceRange) SetMin(val float64) {
+	s.Min = val
+}
+
+// SetMax sets the value of Max.
+func (s *PriceRange) SetMax(val float64) {
+	s.Max = val
 }
 
 // RFC7807 Problem Details.

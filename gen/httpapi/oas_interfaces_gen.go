@@ -5,6 +5,10 @@ type GetProductByIdRes interface {
 	getProductByIdRes()
 }
 
+type GetProductFacetsRes interface {
+	getProductFacetsRes()
+}
+
 type GetProductListRes interface {
 	getProductListRes()
 }

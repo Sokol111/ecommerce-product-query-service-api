@@ -6,6 +6,8 @@
  * OpenAPI spec version: 1.0.23
  */
 import type {
+  FacetsResponse,
+  GetProductFacetsParams,
   GetProductListParams,
   GetRandomProductsParams,
   Problem,
@@ -186,6 +188,70 @@ export const getProductList = async (params: GetProductListParams, options?: Req
   
   const data: getProductListResponse['data'] = body ? JSON.parse(body) : {}
   return { data, status: res.status, headers: res.headers } as getProductListResponse
+}
+
+
+
+/**
+ * Returns available attribute values (facets) computed from actual products in a category.
+Used to build dynamic filter UI that only shows options with matching products.
+
+ * @summary Get attribute facets for filtering products
+ */
+export type getProductFacetsResponse200 = {
+  data: FacetsResponse
+  status: 200
+}
+
+export type getProductFacetsResponse400 = {
+  data: Problem
+  status: 400
+}
+
+export type getProductFacetsResponse500 = {
+  data: Problem
+  status: 500
+}
+    
+export type getProductFacetsResponseSuccess = (getProductFacetsResponse200) & {
+  headers: Headers;
+};
+export type getProductFacetsResponseError = (getProductFacetsResponse400 | getProductFacetsResponse500) & {
+  headers: Headers;
+};
+
+export type getProductFacetsResponse = (getProductFacetsResponseSuccess | getProductFacetsResponseError)
+
+export const getGetProductFacetsUrl = (params: GetProductFacetsParams,) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0 ? `/v1/product/facets?${stringifiedParams}` : `/v1/product/facets`
+}
+
+export const getProductFacets = async (params: GetProductFacetsParams, options?: RequestInit): Promise<getProductFacetsResponse> => {
+  
+  const res = await fetch(getGetProductFacetsUrl(params),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+)
+
+  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
+  
+  const data: getProductFacetsResponse['data'] = body ? JSON.parse(body) : {}
+  return { data, status: res.status, headers: res.headers } as getProductFacetsResponse
 }
 
 

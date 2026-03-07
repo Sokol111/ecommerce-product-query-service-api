@@ -161,6 +161,40 @@ paths:
                         application/problem+json:
                             schema:
                                 $ref: "#/components/schemas/Problem"
+    /v1/product/facets:
+        get:
+            summary: Get attribute facets for filtering products
+            operationId: getProductFacets
+            description: |
+                Returns available attribute values (facets) computed from actual products in a category.
+                Used to build dynamic filter UI that only shows options with matching products.
+            parameters:
+                - name: categoryId
+                  in: query
+                  required: true
+                  schema:
+                    type: string
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+                  description: Category ID to compute facets for
+            responses:
+                "200":
+                    description: Facets computed successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/FacetsResponse"
+                "400":
+                    description: Validation error
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: "#/components/schemas/Problem"
+                "500":
+                    description: Standard internal error
+                    content:
+                        application/problem+json:
+                            schema:
+                                $ref: "#/components/schemas/Problem"
 components:
     schemas:
         ProductListResponse:
@@ -340,3 +374,68 @@ components:
                                 type: string
                             message:
                                 type: string
+        FacetsResponse:
+            type: object
+            required:
+                - facets
+                - priceRange
+            properties:
+                facets:
+                    type: array
+                    description: Available attribute facets computed from actual products
+                    items:
+                        $ref: "#/components/schemas/AttributeFacet"
+                priceRange:
+                    $ref: "#/components/schemas/PriceRange"
+        AttributeFacet:
+            type: object
+            description: |
+                Facet for a single attribute showing available values and counts.
+                Use attribute slug to join with CategoryAttribute from CategoryResponse for display data (name, type, unit, colorCode).
+            required:
+                - slug
+                - values
+            properties:
+                slug:
+                    type: string
+                    example: "operating-system"
+                    description: Attribute slug to match with CategoryAttribute.slug
+                values:
+                    type: array
+                    description: |
+                        Available values with product counts.
+                        - single/multiple: option slug values with counts
+                        - range: numeric values with counts
+                        - boolean: true/false with counts
+                    items:
+                        $ref: "#/components/schemas/FacetValue"
+        FacetValue:
+            type: object
+            description: A single facet value with product count
+            required:
+                - value
+                - count
+            properties:
+                value:
+                    type: string
+                    example: "android"
+                    description: Option slug (single/multiple), numeric string (range), or boolean string
+                count:
+                    type: integer
+                    example: 45
+                    description: Number of products with this value
+        PriceRange:
+            type: object
+            description: Price range across all products in the category
+            required:
+                - min
+                - max
+            properties:
+                min:
+                    type: number
+                    example: 99.99
+                    description: Minimum product price in category
+                max:
+                    type: number
+                    example: 1999.99
+                    description: Maximum product price in category

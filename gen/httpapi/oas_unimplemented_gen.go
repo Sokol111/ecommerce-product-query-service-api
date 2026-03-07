@@ -22,6 +22,16 @@ func (UnimplementedHandler) GetProductById(ctx context.Context, params GetProduc
 	return r, ht.ErrNotImplemented
 }
 
+// GetProductFacets implements getProductFacets operation.
+//
+// Returns available attribute values (facets) computed from actual products in a category.
+// Used to build dynamic filter UI that only shows options with matching products.
+//
+// GET /v1/product/facets
+func (UnimplementedHandler) GetProductFacets(ctx context.Context, params GetProductFacetsParams) (r GetProductFacetsRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // GetProductList implements getProductList operation.
 //
 // Get a paginated list of products with filtering and sorting.

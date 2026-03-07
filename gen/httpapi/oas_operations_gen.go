@@ -7,6 +7,7 @@ type OperationName = string
 
 const (
 	GetProductByIdOperation    OperationName = "GetProductById"
+	GetProductFacetsOperation  OperationName = "GetProductFacets"
 	GetProductListOperation    OperationName = "GetProductList"
 	GetRandomProductsOperation OperationName = "GetRandomProducts"
 )

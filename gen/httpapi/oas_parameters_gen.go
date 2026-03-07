@@ -79,6 +79,64 @@ func decodeGetProductByIdParams(args [1]string, argsEscaped bool, r *http.Reques
 	return params, nil
 }
 
+// GetProductFacetsParams is parameters of getProductFacets operation.
+type GetProductFacetsParams struct {
+	// Category ID to compute facets for.
+	CategoryId string
+}
+
+func unpackGetProductFacetsParams(packed middleware.Parameters) (params GetProductFacetsParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "categoryId",
+			In:   "query",
+		}
+		params.CategoryId = packed[key].(string)
+	}
+	return params
+}
+
+func decodeGetProductFacetsParams(args [0]string, argsEscaped bool, r *http.Request) (params GetProductFacetsParams, _ error) {
+	q := uri.NewQueryDecoder(r.URL.Query())
+	// Decode query: categoryId.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "categoryId",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.CategoryId = c
+				return nil
+			}); err != nil {
+				return err
+			}
+		} else {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "categoryId",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // GetProductListParams is parameters of getProductList operation.
 type GetProductListParams struct {
 	// Page number (must be greater than 0).
