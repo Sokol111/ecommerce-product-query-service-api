@@ -1,6 +1,6 @@
 module github.com/Sokol111/ecommerce-product-query-service-api
 
-go 1.26.0
+go 1.26.1
 
 require (
 	github.com/go-faster/errors v0.7.1
