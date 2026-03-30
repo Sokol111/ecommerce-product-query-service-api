@@ -38,6 +38,27 @@ clean: openapi-clean openapi-ts-clean ## Clean all generated files
 	@printf "$(COLOR_GREEN)✓ All cleaned!$(COLOR_RESET)\n"
 
 # =============================================================================
+# Dependencies
+# =============================================================================
+
+.PHONY: tidy
+tidy: ## Clean up go.mod and go.sum
+	@printf "$(COLOR_GREEN)Tidying go.mod...$(COLOR_RESET)\n"
+	go mod tidy
+
+.PHONY: update-dependencies
+update-dependencies: ## Update dependencies (patch versions only - safe)
+	@printf "$(COLOR_YELLOW)Updating dependencies (patch only)...$(COLOR_RESET)\n"
+	go get -u=patch ./...
+	go mod tidy
+
+.PHONY: update-dependencies-all
+update-dependencies-all: ## Update ALL dependencies to latest (risky!)
+	@printf "$(COLOR_YELLOW)⚠️  Updating ALL dependencies to latest versions...$(COLOR_RESET)\n"
+	go get -u ./...
+	go mod tidy
+
+# =============================================================================
 # Setup
 # =============================================================================
 
