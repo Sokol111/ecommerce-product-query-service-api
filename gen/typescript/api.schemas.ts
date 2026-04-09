@@ -3,7 +3,7 @@
  * Do not edit manually.
  * Product query API
  * API for querying products
- * OpenAPI spec version: 1.1.2
+ * OpenAPI spec version: 1.1.3
  */
 export interface ProductListResponse {
   items: ProductResponse[];
