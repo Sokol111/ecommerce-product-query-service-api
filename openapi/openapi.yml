@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Product query API
-  version: 1.1.5
+  version: 1.1.6
   description: API for querying products
 paths:
   /v1/product/get/{id}:
