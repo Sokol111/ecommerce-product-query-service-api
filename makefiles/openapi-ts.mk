@@ -62,7 +62,7 @@ _openapi-ts-package-json:
 .PHONY: _openapi-ts-tsconfig
 _openapi-ts-tsconfig:
 	@printf "$(COLOR_BLUE)→ Generating tsconfig.json...$(COLOR_RESET)\n"
-	@printf '{\n  "compilerOptions": {\n    "target": "ES2017",\n    "module": "ESNext",\n    "moduleResolution": "node",\n    "declaration": true,\n    "outDir": "dist",\n    "strict": true,\n    "esModuleInterop": true,\n    "skipLibCheck": true\n  },\n  "include": ["**/*.ts"]\n}\n' > $(TS_API_DIR)/tsconfig.json
+	@printf '{\n  "compilerOptions": {\n    "target": "ES2017",\n    "module": "ESNext",\n    "moduleResolution": "bundler",\n    "declaration": true,\n    "outDir": "dist",\n    "strict": true,\n    "esModuleInterop": true,\n    "skipLibCheck": true\n  },\n  "include": ["**/*.ts"]\n}\n' > $(TS_API_DIR)/tsconfig.json
 
 .PHONY: _openapi-ts-index
 _openapi-ts-index:
