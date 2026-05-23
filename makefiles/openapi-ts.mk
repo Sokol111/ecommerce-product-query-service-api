@@ -67,7 +67,7 @@ _openapi-ts-tsconfig:
 .PHONY: _openapi-ts-index
 _openapi-ts-index:
 	@printf "$(COLOR_BLUE)→ Generating index.ts...$(COLOR_RESET)\n"
-	@printf "export * from './api';\nexport * from './api.schemas';\n" > $(TS_API_DIR)/index.ts
+	@printf "export * from './api.js';\nexport * from './api.schemas.js';\n" > $(TS_API_DIR)/index.ts
 
 .PHONY: _openapi-ts-build
 _openapi-ts-build: _openapi-ts-index
