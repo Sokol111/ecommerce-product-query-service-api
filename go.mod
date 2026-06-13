@@ -1,9 +1,9 @@
 module github.com/Sokol111/ecommerce-product-query-service-api
 
-go 1.26.3
+go 1.26.4
 
 require (
-	github.com/Sokol111/ecommerce-commons v0.8.1
+	github.com/Sokol111/ecommerce-commons v0.8.3
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.2.0
 	github.com/ogen-go/ogen v1.20.3
