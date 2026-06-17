@@ -1,0 +1,16 @@
+version: v2
+
+modules:
+  - path: proto
+    name: buf.build/sokol111/product-query-api
+
+deps:
+  - buf.build/googleapis/googleapis
+
+lint:
+  use:
+    - DEFAULT
+
+breaking:
+  use:
+    - FILE

@@ -3,6 +3,7 @@ module github.com/Sokol111/ecommerce-product-query-service-api
 go 1.26.4
 
 require (
+	connectrpc.com/connect v1.20.0
 	github.com/Sokol111/ecommerce-commons v0.8.3
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.2.0
@@ -11,6 +12,8 @@ require (
 	go.opentelemetry.io/otel/metric v1.43.0
 	go.opentelemetry.io/otel/trace v1.43.0
 	go.uber.org/fx v1.24.0
+	google.golang.org/grpc v1.81.1
+	google.golang.org/protobuf v1.36.5
 )
 
 require (

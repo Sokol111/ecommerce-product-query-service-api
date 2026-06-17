@@ -1,11 +1,12 @@
 name: Release
 
 on:
-  workflow_dispatch:
   push:
+    branches:
+      - master
     paths:
-      - "openapi/openapi.yml"
-      - "avro/**"
+      - VERSION
+  workflow_dispatch:
 
 permissions:
   contents: write

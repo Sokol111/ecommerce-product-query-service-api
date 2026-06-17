@@ -1,2 +1,1 @@
-export * from './api.js';
-export * from './api.schemas.js';
+export * from './product_query/v1/product_query_pb.js';
