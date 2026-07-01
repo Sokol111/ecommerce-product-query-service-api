@@ -4,8 +4,6 @@ package product_query.v1;
 
 option go_package = "github.com/Sokol111/ecommerce-product-query-service-api/gen/connect/product_query/v1;productqueryv1";
 
-import "google/protobuf/timestamp.proto";
-
 // ==================== ENUMS ====================
 
 enum AttributeType {

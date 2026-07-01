@@ -4,7 +4,7 @@ CONNECT_OUT ?= gen/connect
 CONNECT_PACKAGE ?= connect
 
 # ---- Binaries ----
-BUF ?= $(shell which buf 2>/dev/null || echo "$$(go env GOPATH)/bin/buf")
+# BUF is defined in the root Makefile
 
 # =============================================================================
 # Connect (Buf + protoc-gen-connect-go)
@@ -13,7 +13,7 @@ BUF ?= $(shell which buf 2>/dev/null || echo "$$(go env GOPATH)/bin/buf")
 .PHONY: connect-generate
 connect-generate: _connect-check-tools _connect-clean-dir ## Generate Go Connect code from proto using buf
 	@echo "$(COLOR_BLUE)→ Generating Connect code...$(COLOR_RESET)"
-	$(BUF) generate
+	$(BUF) generate proto/rpc --template buf.gen.yaml
 	@echo "$(COLOR_GREEN)✓ Connect generation complete!$(COLOR_RESET)"
 	@echo "$(COLOR_BLUE)  Generated files in $(CONNECT_OUT)/:$(COLOR_RESET)"
 	@find $(CONNECT_OUT) -name '*.go' | head -20 | sed 's/^/    /'
@@ -25,23 +25,11 @@ connect-clean: ## Remove generated Connect files
 	@mkdir -p $(CONNECT_OUT)
 	@echo "$(COLOR_GREEN)✓ Cleaned $(CONNECT_OUT)/$(COLOR_RESET)"
 
-.PHONY: connect-lint
-connect-lint: _connect-check-tools ## Lint proto files
-	@echo "$(COLOR_BLUE)→ Linting proto files...$(COLOR_RESET)"
-	$(BUF) lint
-	@echo "$(COLOR_GREEN)✓ Proto linting passed$(COLOR_RESET)"
-
 .PHONY: connect-breaking
 connect-breaking: _connect-check-tools ## Check for breaking proto changes against main
 	@echo "$(COLOR_BLUE)→ Checking for breaking changes...$(COLOR_RESET)"
 	$(BUF) breaking --against '.git#branch=main'
 	@echo "$(COLOR_GREEN)✓ No breaking changes detected$(COLOR_RESET)"
-
-.PHONY: connect-format
-connect-format: _connect-check-tools ## Format proto files
-	@echo "$(COLOR_BLUE)→ Formatting proto files...$(COLOR_RESET)"
-	$(BUF) format -w
-	@echo "$(COLOR_GREEN)✓ Proto formatted$(COLOR_RESET)"
 
 .PHONY: connect-install-tools
 connect-install-tools: ## Install buf and protoc plugins

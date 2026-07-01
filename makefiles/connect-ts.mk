@@ -5,7 +5,7 @@ TS_PACKAGE_NAME ?= @sokol111/$(PROJECT_NAME)
 # Версія береться з файлу VERSION
 TS_VERSION ?= $(shell cat VERSION 2>/dev/null | tr -d '[:space:]' || echo "0.1.0")
 
-BUF ?= $(shell which buf 2>/dev/null || echo "$$(go env GOPATH)/bin/buf")
+# BUF is defined in the root Makefile
 
 # =============================================================================
 # Connect TypeScript (buf + protoc-gen-es + protoc-gen-connect-es)
@@ -14,33 +14,33 @@ BUF ?= $(shell which buf 2>/dev/null || echo "$$(go env GOPATH)/bin/buf")
 .PHONY: connect-ts-generate
 connect-ts-generate: _connect-ts-clean _connect-ts-gen _connect-ts-package-json _connect-ts-tsconfig _connect-ts-build ## Generate TypeScript Connect client from proto
 	@printf "$(COLOR_GREEN)✓ TypeScript Connect generation complete!$(COLOR_RESET)\n"
-	printf "$(COLOR_BLUE)  Package: $(TS_PACKAGE_NAME)@$(TS_VERSION)$(COLOR_RESET)\n"
-	printf "$(COLOR_BLUE)  Location: $(TS_API_DIR)/$(COLOR_RESET)\n"
+	@printf "$(COLOR_BLUE)  Package: $(TS_PACKAGE_NAME)@$(TS_VERSION)$(COLOR_RESET)\n"
+	@printf "$(COLOR_BLUE)  Location: $(TS_API_DIR)/$(COLOR_RESET)\n"
 
 .PHONY: connect-ts-generate-fast
 connect-ts-generate-fast: _connect-ts-clean _connect-ts-gen _connect-ts-package-json _connect-ts-tsconfig _connect-ts-index ## Generate TypeScript Connect client (no build, for committing to git)
 	@printf "$(COLOR_GREEN)✓ TypeScript Connect generation complete (source only)!$(COLOR_RESET)\n"
-	printf "$(COLOR_YELLOW)  Note: CI will build before publishing$(COLOR_RESET)\n"
-	printf "$(COLOR_BLUE)  Package: $(TS_PACKAGE_NAME)@$(TS_VERSION)$(COLOR_RESET)\n"
-	printf "$(COLOR_BLUE)  Location: $(TS_API_DIR)/$(COLOR_RESET)\n"
+	@printf "$(COLOR_YELLOW)  Note: CI will build before publishing$(COLOR_RESET)\n"
+	@printf "$(COLOR_BLUE)  Package: $(TS_PACKAGE_NAME)@$(TS_VERSION)$(COLOR_RESET)\n"
+	@printf "$(COLOR_BLUE)  Location: $(TS_API_DIR)/$(COLOR_RESET)\n"
 
 .PHONY: connect-ts-clean
 connect-ts-clean: ## Remove generated TypeScript Connect files
 	@printf "$(COLOR_BLUE)→ Cleaning generated TypeScript files...$(COLOR_RESET)\n"
-	rm -rf $(TS_API_DIR)
-	printf "$(COLOR_GREEN)✓ Cleaned $(TS_API_DIR)/$(COLOR_RESET)\n"
+	@rm -rf $(TS_API_DIR)
+	@printf "$(COLOR_GREEN)✓ Cleaned $(TS_API_DIR)/$(COLOR_RESET)\n"
 
 .PHONY: connect-ts-install-tools
 connect-ts-install-tools: ## Install tools for TypeScript Connect generation (buf uses remote plugins — no local install needed)
 	@printf "$(COLOR_BLUE)→ TypeScript generation uses buf remote plugins — no additional tools required$(COLOR_RESET)\n"
-	printf "$(COLOR_GREEN)✓ Done$(COLOR_RESET)\n"
+	@printf "$(COLOR_GREEN)✓ Done$(COLOR_RESET)\n"
 
 # ---- Internal targets ----
 
 .PHONY: _connect-ts-clean
 _connect-ts-clean:
 	@rm -rf $(TS_API_DIR)
-	mkdir -p $(TS_API_DIR)
+	@mkdir -p $(TS_API_DIR)
 
 .PHONY: _connect-ts-gen
 _connect-ts-gen:
