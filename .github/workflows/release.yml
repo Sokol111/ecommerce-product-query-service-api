@@ -7,6 +7,11 @@ on:
     paths:
       - VERSION
   workflow_dispatch:
+    inputs:
+      skip_breaking:
+        description: 'Skip proto breaking change check'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -15,3 +20,5 @@ permissions:
 jobs:
   release:
     uses: Sokol111/ecommerce-infrastructure/.github/workflows/api-release.yml@master
+    with:
+      skip_breaking: ${{ inputs.skip_breaking || false }}
