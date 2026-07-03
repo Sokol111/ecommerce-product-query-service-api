@@ -10,7 +10,7 @@ MAKEFLAGS += --no-builtin-rules
 # Path to this repo's makefiles
 MAKEFILES_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))makefiles
 PROJECT_NAME ?= $(shell basename $(CURDIR))
-BUF ?= $(shell which buf 2>/dev/null || echo "$$$(go env GOPATH)/bin/buf")
+BUF ?= $(shell which buf 2>/dev/null || echo "$$(go env GOPATH)/bin/buf")
 
 # Colors for output
 COLOR_RESET := \033[0m
