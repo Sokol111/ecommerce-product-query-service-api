@@ -1,6 +1,11 @@
-# ---- Configuration (defaults, can be overridden) ----
-PROTO_DIR ?= proto
-CONNECT_OUT ?= gen/connect
+# ---- Configuration (auto-detected, can be overridden) ----
+# Auto-detect the service name from proto/ subdirectory (e.g. proto/tenant/ -> tenant)
+_PROTO_SUBDIR := $(shell ls proto 2>/dev/null | head -1)
+
+RPC_PROTO_DIR   ?= proto/$(_PROTO_SUBDIR)/v1
+EVENTS_PROTO_DIR ?= proto/$(_PROTO_SUBDIR)/events
+PROTO_DIR       ?= proto
+CONNECT_OUT     ?= gen/go/$(_PROTO_SUBDIR)/v1
 CONNECT_PACKAGE ?= connect
 
 # ---- Binaries ----
@@ -13,7 +18,7 @@ CONNECT_PACKAGE ?= connect
 .PHONY: connect-generate
 connect-generate: _connect-check-tools _connect-clean-dir ## Generate Go Connect code from proto using buf
 	@echo "$(COLOR_BLUE)→ Generating Connect code...$(COLOR_RESET)"
-	$(BUF) generate proto/rpc --template buf.gen.yaml
+	$(BUF) generate --path $(RPC_PROTO_DIR) --template buf.gen.yaml
 	@echo "$(COLOR_GREEN)✓ Connect generation complete!$(COLOR_RESET)"
 	@echo "$(COLOR_BLUE)  Generated files in $(CONNECT_OUT)/:$(COLOR_RESET)"
 	@find $(CONNECT_OUT) -name '*.go' | head -20 | sed 's/^/    /'

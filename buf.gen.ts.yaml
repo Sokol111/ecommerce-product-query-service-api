@@ -1,11 +1,9 @@
 version: v2
 
-inputs:
-  - directory: proto/rpc
-
 plugins:
-  - remote: buf.build/bufbuild/es
+  - local: protoc-gen-es
     out: gen/typescript
     opt:
       - target=ts
+      - import_extension=js
     include_imports: true

@@ -45,7 +45,7 @@ _connect-ts-clean:
 .PHONY: _connect-ts-gen
 _connect-ts-gen:
 	@printf "$(COLOR_BLUE)→ Generating TypeScript Connect client (buf + protoc-gen-es)...$(COLOR_RESET)\n"
-	$(BUF) generate --template buf.gen.ts.yaml
+	$(BUF) generate --path $(RPC_PROTO_DIR) --template buf.gen.ts.yaml
 
 .PHONY: _connect-ts-package-json
 _connect-ts-package-json:

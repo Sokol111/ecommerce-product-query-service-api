@@ -1,7 +1,7 @@
 version: v2
 
 modules:
-  - path: proto/rpc
+  - path: proto
     name: buf.build/sokol111/product-query-api
 
 deps:

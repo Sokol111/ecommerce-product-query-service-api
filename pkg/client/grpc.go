@@ -5,7 +5,7 @@ import (
 	"go.uber.org/fx"
 
 	grpcclient "github.com/Sokol111/ecommerce-commons/pkg/grpc/client"
-	productv1 "github.com/Sokol111/ecommerce-product-query-service-api/gen/connect/product_query/v1"
+	productv1 "github.com/Sokol111/ecommerce-product-query-service-api/gen/go/product_query/v1"
 )
 
 // Module wires a native gRPC client for ProductQueryService.
