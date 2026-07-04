@@ -4,7 +4,7 @@ go 1.26.4
 
 require (
 	connectrpc.com/connect v1.20.0
-	github.com/Sokol111/ecommerce-commons v0.8.5
+	github.com/Sokol111/ecommerce-commons v0.8.6
 	github.com/knadh/koanf/v2 v2.3.5
 	go.uber.org/fx v1.24.0
 	google.golang.org/grpc v1.81.1
