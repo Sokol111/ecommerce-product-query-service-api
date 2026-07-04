@@ -71,3 +71,5 @@ _connect-ts-index:
 _connect-ts-build: _connect-ts-index
 	@printf "$(COLOR_BLUE)→ Installing dependencies and building...$(COLOR_RESET)\n"
 	cd $(TS_API_DIR) && npm install && npm run build
+	@rm -rf $(TS_API_DIR)/node_modules
+	@printf "$(COLOR_GREEN)→ Cleaned up node_modules to avoid peer version conflicts$(COLOR_RESET)\n"
