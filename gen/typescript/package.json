@@ -1,7 +1,7 @@
 {
   "name": "@sokol111/ecommerce-product-query-service-api",
   "description": "Generated TypeScript Connect client from proto for ecommerce-product-query-service-api",
-  "version": "2.2.4",
+  "version": "1.0.20",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
