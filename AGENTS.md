@@ -5,7 +5,7 @@
 This is the **API contract repo** for `ecommerce-product-query-service` (the CQRS read side
 for products). It is *not* a service — it holds the protobuf source of truth and the generated
 client SDKs that consumers import. It is one of the `ecommerce-*-api` repos in the larger
-multi-repo workspace (see the workspace root `CLAUDE.md` for the release-then-bump model, the
+multi-repo workspace (see the workspace root `AGENTS.md` for the release-then-bump model, the
 `go.work` local-resolution rule, and how consumers depend on this module).
 
 The Go module published from here is `github.com/Sokol111/ecommerce-product-query-service-api`;
@@ -16,7 +16,7 @@ Packages). Both are built from a single `.proto`.
 
 **Edit `proto/` and regenerate. Never hand-edit anything under `gen/`.** Both `gen/go` and
 `gen/typescript` are fully derived from `proto/product_query/v1/product_query.proto`. Every
-generated file is wiped and rewritten by `make generate`. The workspace-level PreToolUse hook
+generated file is wiped and rewritten by `make generate`. The workspace-level OpenCode plugin
 also **blocks** direct edits to `gen/go` and `gen/typescript`.
 
 Note: the generated *TypeScript sources* (`*_pb.ts`, `index.ts`, `package.json`, `tsconfig.json`)
