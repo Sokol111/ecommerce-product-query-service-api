@@ -1,0 +1,21 @@
+buf.lock
+  s_b0011afa5ead3a::t_c37d5d014d46aa 1-6
+go.mod
+  s_b0011afa5ead3a::t_7d12ac04a71480 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.11",
+  "base_commit_sha": "dbf5d535ba08d6528c06e65b81d6bd3460e1ddd1",
+  "prompts": {},
+  "sessions": {
+    "s_b0011afa5ead3a": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_0943e6c06ffe5G0EwTRgXpqXw6",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "Sokol111 <igorsokol111@gmail.com>"
+    }
+  }
+}
